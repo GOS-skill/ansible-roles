@@ -1,0 +1,2 @@
+include: vault.yml
+ansible_become_pass: "{{sudo_pass_devops}}"
