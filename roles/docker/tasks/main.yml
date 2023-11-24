@@ -1,0 +1,20 @@
+---
+- name: Add Apt signing key for docker repository
+  ansible.builtin.copy:
+    src: docker.gpg
+    dest: /etc/apt/trusted.gpg.d/
+    mode: '0644'
+  become: true  
+
+- name: Add docker repository
+  ansible.builtin.apt_repository:
+    repo: "{{docker_repo}}"
+    state: present
+  become: true
+
+- name: Install required packages
+  ansible.builtin.apt:
+    pkg: '{{packages}}'
+    state: latest
+    update_cache: true
+  become: true
