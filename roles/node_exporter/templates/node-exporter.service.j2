@@ -6,7 +6,7 @@ After=network.target
 User={{user}}
 Group={{group}}
 Type=simple
-ExecStart={{install_path}}bin/node_exporter --collector.textfile.directory={{install_path}}textfile_collector
+ExecStart={{install_path}}/bin/node_exporter --collector.textfile.directory={{install_path}}textfile_collector
 
 [Install]
 WantedBy=multi-user.target
