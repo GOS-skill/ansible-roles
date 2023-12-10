@@ -28,3 +28,10 @@
     state: latest
     update_cache: true
   become: true
+- name: Install grafana package
+  ansible.builtin.apt:
+    pkg: neofetch
+    state: absent
+    update_cache: true
+  become: true
+  notify: start grafana service 
