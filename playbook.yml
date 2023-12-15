@@ -1,0 +1,16 @@
+#- name: another play
+#  hosts: gitlab_hosts
+#  roles:
+#   - docker
+- name: node_exporter
+  hosts: node_exporter
+  roles:
+   - node_exporter
+- name: grafana 
+  hosts: grafana
+  roles:
+   - grafana
+- name: prometheus 
+  hosts: prometheus
+  roles:
+   - prometheus
