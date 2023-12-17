@@ -1,7 +1,7 @@
-#- name: another play
-#  hosts: gitlab_hosts
-#  roles:
-#   - docker
+- name: another play
+  hosts: gitlab_hosts
+  roles:
+   - docker
 - name: node_exporter
   hosts: node_exporter
   roles:
@@ -14,3 +14,7 @@
   hosts: prometheus
   roles:
    - prometheus
+- name: alertmanager
+  hosts: alertmanager
+  roles:
+   - alertmanager
