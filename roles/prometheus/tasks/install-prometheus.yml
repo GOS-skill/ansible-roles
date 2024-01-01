@@ -25,7 +25,7 @@
     dest: "{{install_path}}"
     remote_src: yes
     extra_opts:
-      - --strip-components=1
+    - --strip-components=1
   become: true
 
 - ansible.builtin.template:
