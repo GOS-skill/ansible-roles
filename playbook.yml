@@ -1,20 +1,20 @@
-- name: another play
-  hosts: gitlab_hosts
-  roles:
-   - docker
-- name: node_exporter
-  hosts: node_exporter
-  roles:
-   - node_exporter
-- name: grafana 
-  hosts: grafana
-  roles:
-   - grafana
-- name: prometheus 
-  hosts: prometheus
-  roles:
-   - prometheus
-- name: alertmanager
+- name: setup | node_exporter
+hosts: node_exporter
+roles:
+  - node_exporter
+
+- name: setup | prometheus
+hosts: prometheus
+roles:
+  - prometheus
+
+- name: setup | alertmanager 
   hosts: alertmanager
   roles:
-   - alertmanager
+  - alertmanager
+
+- name: setup | docker
+  hosts: docker
+  roles:
+    - docker
+    - cAdvisor
