@@ -20,13 +20,13 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets:
-      {% for host in groups['node_exporter'] %}
-    - '{{ hostvars[host].ansible_host}}:9100'
-      {% endfor %}
+{% for host in groups['node_exporter'] %}
+        - '{{ hostvars[host].ansible_host}}:9100'
+{% endfor %}
   - job_name: 'cAdvisor'
     scrape_interval: 5s
     static_configs:
       - targets:
-      {% for host in groups['cAdvisor'] %}
-    - '{{ hostvars[host].ansible_host}}:9280'
-      {% endfor %}
+{% for host in groups['cAdvisor'] %}
+        - '{{ hostvars[host].ansible_host}}:9280'
+{% endfor %}
