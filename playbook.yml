@@ -1,20 +1,21 @@
+---
 - name: setup | node_exporter
-hosts: node_exporter
-roles:
-  - node_exporter
+  hosts: node_exporter
+  roles:
+   - node_exporter
 
 - name: setup | prometheus
-hosts: prometheus
-roles:
-  - prometheus
+  hosts: prometheus
+  roles:
+   - prometheus
 
 - name: setup | alertmanager 
   hosts: alertmanager
   roles:
-  - alertmanager
+   - alertmanager
 
 - name: setup | docker
   hosts: docker
   roles:
-    - docker
-    - cAdvisor
+   - docker
+   - cAdvisor
