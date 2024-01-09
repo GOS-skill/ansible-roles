@@ -1,0 +1,17 @@
+---
+# tasks file for gitlab-runner
+- name: Download and install the gitlab-runner
+  apt:
+    deb: '{{gitlab_runner_package}}'
+    # state: present
+  become: true
+
+- name: Copy gitlab-runner config
+  template:
+    src: config.toml.j2
+    dest: /etc/gitlab-runner/config.toml
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  notify: restart gitlab-runner

@@ -1,0 +1,8 @@
+---
+# defaults file for gitlab-runner
+gitlab_runner_package: "https://packages.gitlab.com/runner/gitlab-runner/packages/linuxmint/sarah/gitlab-runner_16.6.2_amd64.deb/download.deb"
+gitlab_runner_concurrent: "5"
+gitlab_runner_url: "https://gitlab.com"
+gitlab_runner_token: "https://packages.gitlab.com/runner/gitlab-runner/packages/linuxmint/sarah/gitlab-runner_16.6.2_amd64.deb/download.deb"
+gitlab_runner_executor: "docker"
+gitlab_runner_image: "docker:20-dind"

@@ -1,0 +1,5 @@
+---
+# handlers file for gitlab-runner
+- name: restart gitlab-runner
+  become: true
+  service: name=gitlab-runner enabled=yes state=restarted
