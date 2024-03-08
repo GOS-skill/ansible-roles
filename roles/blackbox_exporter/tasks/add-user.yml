@@ -1,0 +1,14 @@
+- name: Ensure group blackbox_exporter exists
+  ansible.builtin.group:
+    name: '{{ group }}'
+    state: present
+    system: yes
+  become: true
+
+- name: add blackbox_exporter user
+  user:
+    name: '{{ user }}'
+    shell: /usr/sbin/nologin
+    group: '{{ group }}'
+    system: true
+  become: true

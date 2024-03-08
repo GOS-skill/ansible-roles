@@ -1,0 +1,33 @@
+---
+- name: Make sure the installation path exists
+  ansible.builtin.file:
+    path: "{{install_path}}/bin"
+    owner: '{{ user }}'
+    group: '{{ group }}'
+    mode: 0755
+    recurse: yes
+    state: directory
+  become: true
+
+- name: Unarchive blackbox_exporter archive 
+  ansible.builtin.unarchive:
+    src: '{{exporter_url}}'
+    dest: "{{install_path}}/bin"
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+  become: true
+  # become_user: '{{ user }}'
+
+- template:
+    src: 'blackbox_exporter.service.j2'
+    dest: '/etc/systemd/system/blackbox_exporter.service'
+  become: true
+
+- name: Restart service 
+  ansible.builtin.systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name : 'blackbox_exporter.service'
+  become: true

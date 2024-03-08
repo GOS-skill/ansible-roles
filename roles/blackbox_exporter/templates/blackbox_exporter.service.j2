@@ -1,0 +1,10 @@
+[Unit]
+Description=blackbox_exporter 
+After=network.target
+[Service]
+User={{user}}
+Group={{group}}
+Type=simple
+ExecStart={{install_path}}/bin/blackbox_exporter --config.file={{install_path}}/bin/blackbox.yml
+[Install]
+WantedBy=multi-user.target

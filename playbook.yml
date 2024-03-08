@@ -19,3 +19,8 @@
   roles:
    - docker
    - cAdvisor
+
+- name: setup | blackbox_exporter
+  hosts: blackboxes
+  roles:
+   - blackbox_exporter
