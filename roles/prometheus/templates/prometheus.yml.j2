@@ -30,3 +30,22 @@ scrape_configs:
 {% for host in groups['cAdvisor'] %}
         - '{{ hostvars[host].ansible_host}}:9280'
 {% endfor %}
+  - job_name: blackbox
+    metrics_path: /probe
+    scrape_interval: 5s
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+{% for domin in  endpoints %}
+        - '{{domin}}'
+{% endfor %}
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+{% for host in groups['blackboxs']%}
+        replacement: '{{ hostvars[host].ansible_host}}:9115'
+{% endfor %}
