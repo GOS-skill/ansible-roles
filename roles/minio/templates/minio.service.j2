@@ -1,0 +1,28 @@
+[Unit]
+Description=MinIO
+Documentation=https://min.io/docs/minio/linux/index.html
+Wants=network-online.target
+After=network-online.target
+AssertFileIsExecutable={{ install_path }}/minio
+
+[Service]
+WorkingDirectory=/usr/local
+
+User=root
+Group=root
+ProtectProc=invisible
+
+EnvironmentFile=-/etc/default/minio
+ExecStart={{ install_path }}/minio server $MINIO_OPTS $MINIO_VOLUMES
+
+Restart=always
+
+LimitNOFILE=65536
+
+TasksMax=infinity
+
+TimeoutStopSec=infinity
+SendSIGKILL=no
+
+[Install]
+WantedBy=multi-user.target

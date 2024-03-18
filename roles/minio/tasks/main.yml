@@ -1,0 +1,58 @@
+---
+- name: Download minio binary
+  ansible.builtin.get_url:
+    url: https://dl.min.io/server/minio/release/linux-amd64/minio
+    dest: "{{ install_path }}/minio"
+    mode: '0755'
+
+- name: Ensure /data directory exists
+  ansible.builtin.file:
+    path: /data
+    state: directory
+
+- name: Format The storage path with xfs
+  ansible.builtin.filesystem:
+    fstype: xfs
+    dev: "{{ storage_path }}"
+
+- name: Update /etc/fstab to mount storage path
+  ansible.builtin.mount:
+    path: /data
+    src: "{{ storage_path }}"
+    fstype: xfs
+    opts: defaults,noatime,nofail
+    dump: 0
+    passno: 0
+    state: present
+
+- name: Mount all filesystems
+  ansible.builtin.shell: mount -a
+
+- name: Add custom hosts entries
+  ansible.builtin.blockinfile:
+    path: /etc/hosts
+    block: |
+      {{ minio_01_ip }} {{ minio_01_hostname }}
+      {{ minio_02_ip }} {{ minio_02_hostname }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    create: no
+
+- name: Template a file to /etc/default/
+  ansible.builtin.template:
+    src: minio.j2
+    dest: /etc/default/minio
+
+- name: Template a file to /lib/systemd/system/
+  ansible.builtin.template:
+    src: minio.service.j2
+    dest: /lib/systemd/system/minio.service
+
+- name: Start minio ervice
+  ansible.builtin.systemd:
+    state: started
+    enabled: yes
+    daemon_reload: yes
+    name : 'minio'
+  become: true
+
+
