@@ -9,7 +9,7 @@
   roles:
    - prometheus
 
-- name: setup | alertmanager 
+- name: setup | alertmanager
   hosts: alertmanager
   roles:
    - alertmanager
@@ -24,3 +24,9 @@
   hosts: blackboxes
   roles:
    - blackbox_exporter
+
+- name: setup | minio
+  hosts: minio
+  roles:
+   - minio
+  become: true

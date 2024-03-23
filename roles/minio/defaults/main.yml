@@ -1,0 +1,6 @@
+---
+minio_port: 9000
+minio_console_port: 9100
+storage_path: /dev/sdb
+install_path: /usr/local/bin
+bin_url: https://dl.min.io/server/minio/release/linux-amd64/minio

@@ -1,0 +1,6 @@
+{% set minio_volumes = [] %}
+{% for host in groups['minio'] %}
+{% set _ = minio_volumes.append('http://' + host + ':' + minio_port|string + '/data') %}
+{% endfor %}
+MINIO_VOLUMES="{{ minio_volumes | join(' ') }}"
+MINIO_OPTS="--console-address :{{ minio_console_port }}"
