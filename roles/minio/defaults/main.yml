@@ -1,8 +1,4 @@
 ---
-minio_01_hostname: minio-01
-minio_02_hostname: minio-02
-minio_01_ip: 192.168.1.108
-minio_02_ip: 192.168.1.110
 minio_port: 9000
 minio_console_port: 9100
 storage_path: /dev/sdb
