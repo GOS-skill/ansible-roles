@@ -1,31 +1,37 @@
 ---
-- name: Make sure the installation path exists
-  ansible.builtin.file:
-    path: "{{ install_path }}"
-    mode: '0755'
-    recurse: yes
-    state: directory
-  become: true
+- name: Make sure the minio binary exists
+  ansible.builtin.stat:
+    path: "{{ install_path }}/minio"
   register: minio_binary
 
-- name: Download minio binary
-  ansible.builtin.get_url:
-    url: "{{ bin_url }}"
+- name: Move minio binary from localhost to target servers
+  ansible.builtin.copy:
+    src: "/home/lyon/w/minio"
     dest: "{{ install_path }}/minio"
-    mode: '0755'
-  notify: restart minio
-  when: not minio_binary
+    mode: "0755"
+  when: not minio_binary.stat.exists
 
-- name: Ensure /data directory exists
+- name: Ensure that /data path exists
+  ansible.builtin.stat:
+    path: /data
+  register: data
+
+- name: Create /data dir
   ansible.builtin.file:
     path: /data
     state: directory
   become: true
+  when: not data.stat.exists
+
+- name: Ensure that storage_path exists
+  ansible.builtin.stat:
+    path: "{{ storage_path }}"
 
 - name: Format The storage path with xfs
   ansible.builtin.filesystem:
     fstype: xfs
     dev: "{{ storage_path }}"
+    state: present
 
 - name: Update /etc/fstab to persist mount path
   ansible.builtin.mount:
@@ -60,14 +66,8 @@
   ansible.builtin.template:
     src: minio.service.j2
     dest: /lib/systemd/system/minio.service
-  notify: restart minio
+  notify: reload and restart minio systemd
 
-- name: Start minio service
-  ansible.builtin.systemd:
-    state: started
-    enabled: yes
-    daemon_reload: yes
-    name : 'minio'
-  become: true
+
 
 
