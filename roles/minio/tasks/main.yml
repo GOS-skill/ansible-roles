@@ -1,4 +1,7 @@
 ---
+- name: import add user task
+  import_tasks: add-user.yml
+
 - name: Make sure the minio binary exists
   ansible.builtin.stat:
     path: "{{ install_path }}/minio"
@@ -6,45 +9,42 @@
 
 - name: Move minio binary from localhost to target servers
   ansible.builtin.copy:
-    src: "/home/lyon/w/minio"
+    src: "/home/saleh/w/minio"
     dest: "{{ install_path }}/minio"
     mode: "0755"
   when: not minio_binary.stat.exists
 
-- name: Ensure that /data path exists
-  ansible.builtin.stat:
-    path: /data
-  register: data
-
-- name: Create /data dir
+- name: Create storage path
   ansible.builtin.file:
-    path: /data
+    path: "{{ storage_path }}"
     state: directory
+    owner: "{{ user }}"
+    group: "{{ group }}"
   become: true
-  when: not data.stat.exists
 
 - name: Ensure that storage_path exists
   ansible.builtin.stat:
-    path: "{{ storage_path }}"
+    path: "{{ disk_path }}"
 
 - name: Format The storage path with xfs
   ansible.builtin.filesystem:
     fstype: xfs
-    dev: "{{ storage_path }}"
+    dev: "{{ disk_path }}"
     state: present
 
 - name: Update /etc/fstab to persist mount path
   ansible.builtin.mount:
-    path: /data
-    src: "{{ storage_path }}"
+    path: "{{ storage_path }}"
+    src: "{{ disk_path }}"
     fstype: xfs
     opts: defaults,noatime,nofail
     dump: 0
     passno: 0
-    state: present
+    state: mounted
 
-- name: Mount all filesystems
-  ansible.builtin.shell: mount -a
+#- name: Mount all filesystems
+#  ansible.builtin.shell: mount -a
+#  ret
 
 - name: Add custom hosts entries
   ansible.builtin.blockinfile:
@@ -60,7 +60,6 @@
   ansible.builtin.template:
     src: minio.j2
     dest: /etc/default/minio
-  notify: restart minio
 
 - name: Move minio unit file to /lib/systemd/system/
   ansible.builtin.template:

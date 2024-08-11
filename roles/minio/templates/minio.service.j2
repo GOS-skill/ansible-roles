@@ -8,12 +8,12 @@ AssertFileIsExecutable={{ install_path }}/minio
 [Service]
 WorkingDirectory=/usr/local
 
-User=root
-Group=root
+User={{ user }}
+Group={{ group }}
 ProtectProc=invisible
 
 EnvironmentFile=-/etc/default/minio
-ExecStart={{ install_path }}/minio server $MINIO_OPTS $MINIO_VOLUMES
+ExecStart={{ install_path }}/minio server $MINIO_OPTS
 
 Restart=always
 

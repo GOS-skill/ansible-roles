@@ -4,11 +4,11 @@
     state: restarted
     enabled: yes
     daemon_reload: yes
-    name : 'minio'
+    name: 'minio'
   become: true
 
 - name: restart minio
   ansible.builtin.systemd:
     state: restarted
-    name : 'minio'
+    name: 'minio'
   become: true
